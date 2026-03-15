@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BLITZ BAND | Boxing Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<header class="main-header">
+
+<div class="logo-container">
+<img src="images/logo3.png" alt="Blitz Band Logo" class="main-logo">
+
+<span class="logo-text">
+BLITZ <span class="accent-text">BAND</span>
+</span>
+</div>
+
+<div id="connectionStatus" class="disconnected">
+<span id="statusText">Disconnected</span>
+<span id="statusDot">🔴</span>
+</div>
+
+</header>
+
+<main>
+
+
+
+<div class="control-center">
+
+<div class="connection-panel">
+<button id="connectBtn" type="button">Connect</button>
+<button id="disconnectBtn" type="button" disabled>Disconnect</button>
+<button id="resetBtn" type="button" disabled>Reset Session</button>
+</div>
+
+<button id="downloadBtn" type="button">Download CSV</button>
+
+<button id="aboutBtn" class="about-btn" type="button">
+About System
+</button>
+
+<div id="aboutPanel" class="about-panel">
+
+<div class="about-card">
+
+<h2 class="about-title">
+WRIST‑MOUNTED PUNCH TEMPO MONITOR
+</h2>
+
+<p class="about-text">
+A wearable system that detects punch events from wrist motion and computes real-time punch tempo (PPS) on-device.
+</p>
+
+<p class="about-text">
+The ESP32 processes motion data locally and transmits performance metrics wirelessly via BLE to the web dashboard.
+</p>
+
+<p class="about-subtitle">Technologies</p>
+
+<p class="about-tech">
+ESP32 • MPU6050 • BLE • Web Bluetooth • HTML • CSS • JavaScript
+</p>
+
+</div>
+</div>
+
+</div>
+
+
+
+<section class="stats-panel">
+
+<div class="stat-card">
+<p class="label">Punch Tempo</p>
+<span id="pps" class="value waiting">0.00</span>
+<span class="unit">PPS</span>
+</div>
+
+<div class="stat-card">
+<p class="label">Total Punches</p>
+<span id="punchCount" class="value waiting">0</span>
+<div class="pulse-dot" id="pulseDot"></div>
+</div>
+
+<div class="stat-card">
+<p class="label">Session Time</p>
+<span id="timer" class="value waiting">00:00</span>
+</div>
+
+<div class="stat-card">
+<p class="label">Punches (30s)</p>
+<span id="p30" class="value waiting">0</span>
+</div>
+
+
+
+<div class="stat-card chart-card">
+    <p class="label">Punch Performance</p>
+
+    <div class="chart-container">
+        <canvas id="performanceChart"></canvas>
+    </div>
+
+</div>
+
+</section>
+
+</main>
+
+
+
+<footer class="credits">
+
+<div class="credits-card">
+
+<h2 class="credits-title">PROJECT CREDITS</h2>
+
+<div class="team-strip">
+
+<div class="flip-card">
+<div class="flip-card-inner">
+
+<div class="flip-card-front">
+<img src="images/saurabh.png" alt="Saurabh Sathish">
+</div>
+
+<div class="flip-card-back">
+<span class="member-name">Saurabh Sathish</span>
+<span class="member-role">Hardware</span>
+</div>
+
+</div>
+</div>
+
+<div class="flip-card">
+<div class="flip-card-inner">
+
+<div class="flip-card-front">
+<img src="images/Rishab.png" alt="Rishabadev P">
+</div>
+
+<div class="flip-card-back">
+<span class="member-name">Rishabadev P</span>
+<span class="member-role">Software</span>
+</div>
+
+</div>
+</div>
+
+<div class="flip-card">
+<div class="flip-card-inner">
+
+<div class="flip-card-front">
+<img src="images/sanjana.png" alt="Sanjana S">
+</div>
+
+<div class="flip-card-back">
+<span class="member-name">Sanjana S</span>
+<span class="member-role">Documentation & PR</span>
+</div>
+
+</div>
+</div>
+
+<div class="flip-card">
+<div class="flip-card-inner">
+
+<div class="flip-card-front">
+<img src="images/Sanjay2.jpeg" alt="Sanjay Krishna">
+</div>
+
+<div class="flip-card-back">
+<span class="member-name">Sanjay Krishna</span>
+<span class="member-role">CAD</span>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<hr class="credits-divider">
+
+<div class="footer-bottom">
+
+<div>
+<p class="credits-label">Institution</p>
+<p>School Of Engineering, CUSAT</p>
+</div>
+
+<div>
+<p class="credits-label">Year</p>
+<p>2026</p>
+</div>
+
+</div>
+
+</div>
+
+</footer>
+
+<script src="app.js"></script>
+
+</body>
+</html>
