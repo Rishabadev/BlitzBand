@@ -360,8 +360,10 @@ button:disabled{
     }
 
     .stat-card:nth-child(4) {
-        max-width: 100%;
+        max-width: none;
         grid-column: auto;
+        margin: 0;
+        width: auto;
     }
     
     .chart-card{
