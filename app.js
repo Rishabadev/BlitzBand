@@ -1,4 +1,3 @@
-
 let manualDisconnect = false;
 let device = null;
 let characteristic = null;
@@ -6,7 +5,6 @@ let reconnecting = false;
 
 let csvHistory = [];
 let lastStoredWindow = -1;
-
 
 let chart;
 let chartLabels = [];
@@ -31,7 +29,6 @@ const aboutPanel = document.getElementById('aboutPanel');
 
 const pulseDot = document.getElementById("pulseDot");
 
-
 function setStatus(text, dot){
   statusText.textContent = text;
   statusDot.textContent = dot;
@@ -45,7 +42,6 @@ function setStatus(text, dot){
   }
 }
 
-
 connectBtn.addEventListener("click", connect);
 disconnectBtn.addEventListener("click", disconnect);
 
@@ -56,7 +52,6 @@ if(resetBtn){
 if(downloadBtn){
   downloadBtn.addEventListener("click", downloadCSV);
 }
-
 
 async function connect(){
 
@@ -87,7 +82,6 @@ async function connect(){
   }
 }
 
-
 async function connectGATT(){
 
   const server = await device.gatt.connect();
@@ -107,7 +101,6 @@ async function connectGATT(){
     handleData
   );
 }
-
 
 function disconnect(){
 
@@ -134,7 +127,6 @@ function disconnect(){
 
   });
 }
-
 
 async function onDisconnected(){
 
@@ -172,9 +164,8 @@ async function onDisconnected(){
 
     }
   }
-  reconnecting = false;
+  reconnecting = false; 
 }
-
 
 function handleData(event){
 
@@ -196,10 +187,8 @@ function handleData(event){
     const time  = parseInt(data.time);
     const p30   = parseInt(data.p30);
 
-    
     if(isNaN(pps) || isNaN(count) || isNaN(time) || isNaN(p30)) return;
 
-   
     const currentWindow = Math.floor(time / 30);
 
     if(currentWindow !== lastStoredWindow && time >= 30){
@@ -238,7 +227,6 @@ function handleData(event){
   }
 }
 
-
 async function resetDevice(){
 
   if(!characteristic) return;
@@ -266,7 +254,6 @@ async function resetDevice(){
     csvHistory = [];
     lastStoredWindow = -1;
 
-   
     chartLabels.length = 0;
     chartData.length = 0;
     if(chart) chart.update();
@@ -276,7 +263,6 @@ async function resetDevice(){
     console.error("Reset failed",e);
   }
 }
-
 
 function downloadCSV(){
 
@@ -305,7 +291,6 @@ function downloadCSV(){
   URL.revokeObjectURL(url);
 }
 
-
 if(aboutBtn && aboutPanel){
 
   aboutBtn.addEventListener("click", () => {
@@ -313,7 +298,6 @@ if(aboutBtn && aboutPanel){
   });
 
 }
-
 
 function setLiveValue(el,value){
 
@@ -334,7 +318,6 @@ function formatTime(sec){
 
   return `${m}:${s}`;
 }
-
 
 function initChart(){
 
