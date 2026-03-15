@@ -345,6 +345,16 @@ button:disabled{
         height:100px;
     }
 
+    .flip-card-back .member-name{
+        font-size: .75rem;
+    }
+
+    .flip-card-back .member-role{
+        font-size: .55rem;
+        padding: 0 4px;
+        text-align: center;
+    }
+
     .footer-bottom{
         flex-direction:column;
         gap:15px;
