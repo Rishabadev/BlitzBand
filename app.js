@@ -22,7 +22,7 @@ const statusDot  = document.getElementById("statusDot");
 const ppsEl   = document.getElementById("pps");
 const countEl = document.getElementById("punchCount");
 const timeEl  = document.getElementById("timer");
-const p60El   = document.getElementById("p60");
+const p30El   = document.getElementById("p30");
 
 const aboutBtn = document.getElementById('aboutBtn');
 const aboutPanel = document.getElementById('aboutPanel');
@@ -115,7 +115,7 @@ function disconnect(){
 
   if(resetBtn) resetBtn.disabled = true;
 
-  [ppsEl,countEl,timeEl,p60El].forEach(el => {
+  [ppsEl,countEl,timeEl,p30El].forEach(el => {
 
     if(!el) return;
 
@@ -179,23 +179,23 @@ function handleData(event){
     const pps   = parseFloat(data.pps);
     const count = parseInt(data.count);
     const time  = parseInt(data.time);
-    const p60   = parseInt(data.p60);
+    const p30   = parseInt(data.p30);
 
-    if(isNaN(pps) || isNaN(count) || isNaN(time) || isNaN(p60)) return;
+    if(isNaN(pps) || isNaN(count) || isNaN(time) || isNaN(p30)) return;
 
-    const currentWindow = Math.floor(time / 60);
+    const currentWindow = Math.floor(time / 30);
 
-    if(currentWindow !== lastStoredWindow && time >= 60){
+    if(currentWindow !== lastStoredWindow && time >= 30){
 
-        const t = currentWindow * 60;
+        const t = currentWindow * 30;
 
         csvHistory.push({
           time: t,
-          punches: p60
+          punches: p30
         });
 
         chartLabels.push(t);
-        chartData.push(p60);
+        chartData.push(p30);
 
         if(chart) chart.update();
 
@@ -205,7 +205,7 @@ function handleData(event){
     setLiveValue(ppsEl, pps.toFixed(2));
     setLiveValue(countEl, count);
     setLiveValue(timeEl, formatTime(time));
-    setLiveValue(p60El, p60);
+    setLiveValue(p30El, p30);
 
     if(pulseDot){
       pulseDot.classList.add("active");
@@ -230,7 +230,7 @@ async function resetDevice(){
       encoder.encode("RST")
     );
 
-    [ppsEl,countEl,timeEl,p60El].forEach(el => {
+    [ppsEl,countEl,timeEl,p30El].forEach(el => {
 
       if(!el) return;
 
@@ -261,7 +261,7 @@ function downloadCSV(){
     return;
   }
 
-  let csv = "Time (s),Punches in 60s\n";
+  let csv = "Time (s),Punches in 30s\n";
 
   csvHistory.forEach(row => {
     csv += `${row.time},${row.punches}\n`;
@@ -327,7 +327,7 @@ function initChart(){
     data:{
       labels:chartLabels,
       datasets:[{
-        label:"Punches in 60s",
+        label:"Punches in 30s",
         data:chartData,
         borderColor:"#e61e25",
         backgroundColor:gradientFill,
