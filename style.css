@@ -144,7 +144,7 @@ button:disabled{
 }
 
 .stat-card{
-    background:rgba(0,0,0,.7);
+    background:rgba(0,0,0,.35);
     border:1px solid var(--border-thin);
     padding:40px 20px;
     text-align:center;
