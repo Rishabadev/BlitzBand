@@ -30,13 +30,15 @@ const aboutPanel = document.getElementById('aboutPanel');
 const pulseDot = document.getElementById("pulseDot");
 
 function setStatus(text, dot){
+
   statusText.textContent = text;
   statusDot.textContent = dot;
-  
-  if (text === "Connected") {
+
+  if (text === "Connected"){
     connectionStatusEl.classList.remove("disconnected");
     connectionStatusEl.classList.add("connected");
-  } else {
+  }
+  else{
     connectionStatusEl.classList.remove("connected");
     connectionStatusEl.classList.add("disconnected");
   }
@@ -45,13 +47,8 @@ function setStatus(text, dot){
 connectBtn.addEventListener("click", connect);
 disconnectBtn.addEventListener("click", disconnect);
 
-if(resetBtn){
-  resetBtn.addEventListener("click", resetDevice);
-}
-
-if(downloadBtn){
-  downloadBtn.addEventListener("click", downloadCSV);
-}
+if(resetBtn) resetBtn.addEventListener("click", resetDevice);
+if(downloadBtn) downloadBtn.addEventListener("click", downloadCSV);
 
 async function connect(){
 
@@ -74,7 +71,8 @@ async function connect(){
 
     if(resetBtn) resetBtn.disabled = false;
 
-  }catch(error){
+  }
+  catch(error){
 
     console.error(error);
     setStatus("Connection Failed","🔴");
@@ -143,12 +141,6 @@ async function onDisconnected(){
 
   while(device && !device.gatt.connected){
 
-    if(manualDisconnect){
-      manualDisconnect = false;
-      reconnecting = false;
-      return;
-    }
-
     try{
 
       await connectGATT();
@@ -158,13 +150,15 @@ async function onDisconnected(){
       reconnecting = false;
       return;
 
-    }catch(e){
+    }
+    catch{
 
       await new Promise(r => setTimeout(r,1500));
 
     }
   }
-  reconnecting = false; 
+
+  reconnecting = false;
 }
 
 function handleData(event){
@@ -193,28 +187,25 @@ function handleData(event){
 
     if(currentWindow !== lastStoredWindow && time >= 60){
 
-        let t = currentWindow * 60;
+        const t = currentWindow * 60;
 
         csvHistory.push({
           time: t,
           punches: p60
         });
-        
+
         chartLabels.push(t);
         chartData.push(p60);
-        
-        chart.update();
 
-      lastStoredWindow = currentWindow;
+        if(chart) chart.update();
+
+        lastStoredWindow = currentWindow;
     }
 
     setLiveValue(ppsEl, pps.toFixed(2));
     setLiveValue(countEl, count);
     setLiveValue(timeEl, formatTime(time));
-
-    if(p60El && !isNaN(p60)){
-      setLiveValue(p60El,p60);
-    }
+    setLiveValue(p60El, p60);
 
     if(pulseDot){
       pulseDot.classList.add("active");
@@ -239,16 +230,14 @@ async function resetDevice(){
       encoder.encode("RST")
     );
 
-    ppsEl.textContent = "0.00";
-    countEl.textContent = "0";
-    timeEl.textContent = "00:00";
-
-    if(p60El) p60El.textContent = "0";
-    
     [ppsEl,countEl,timeEl,p60El].forEach(el => {
+
       if(!el) return;
+
+      el.textContent = "0";
       el.classList.remove("live");
       el.classList.add("waiting");
+
     });
 
     csvHistory = [];
@@ -256,6 +245,7 @@ async function resetDevice(){
 
     chartLabels.length = 0;
     chartData.length = 0;
+
     if(chart) chart.update();
 
   }
@@ -323,84 +313,52 @@ function initChart(){
 
   const ctx = document.getElementById("performanceChart").getContext("2d");
 
-  const gradientFill = ctx.createLinearGradient(0, 0, 0, 350);
-  gradientFill.addColorStop(0, "rgba(230, 30, 37, 0.6)");
-  gradientFill.addColorStop(1, "rgba(230, 30, 37, 0.0)");
+  const gradientFill = ctx.createLinearGradient(0,0,0,350);
+  gradientFill.addColorStop(0,"rgba(230,30,37,0.6)");
+  gradientFill.addColorStop(1,"rgba(230,30,37,0.0)");
 
   Chart.defaults.color = "#888888";
   Chart.defaults.font.family = "'Oswald', sans-serif";
 
-  chart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: chartLabels,
-      datasets: [{
-        label: "Punches in 60s",
-        data: chartData,
-        borderColor: "#e61e25",
-        backgroundColor: gradientFill,
-        borderWidth: 3,
-        pointBackgroundColor: "#111111",
-        pointBorderColor: "#e61e25",
-        pointBorderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 6,
-        fill: true,
-        tension: 0.4
+  chart = new Chart(ctx,{
+
+    type:"line",
+
+    data:{
+      labels:chartLabels,
+      datasets:[{
+        label:"Punches in 60s",
+        data:chartData,
+        borderColor:"#e61e25",
+        backgroundColor:gradientFill,
+        borderWidth:3,
+        pointBackgroundColor:"#111111",
+        pointBorderColor:"#e61e25",
+        pointBorderWidth:2,
+        pointRadius:4,
+        fill:true,
+        tension:0.4
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false
+
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false}
+      },
+      scales:{
+        x:{
+          grid:{color:"rgba(255,255,255,0.05)"}
         },
-        tooltip: {
-          backgroundColor: "rgba(17, 17, 17, 0.9)",
-          titleColor: "#ffffff",
-          bodyColor: "#e61e25",
-          borderColor: "rgba(255, 255, 255, 0.1)",
-          borderWidth: 1,
-          padding: 12,
-          displayColors: false,
-          callbacks: {
-            title: function(context) {
-              return "Time: " + context[0].label + "s";
-            },
-            label: function(context) {
-              return context.raw + " Punches";
-            }
-          }
+        y:{
+          beginAtZero:true,
+          grid:{color:"rgba(255,255,255,0.05)"}
         }
-      },
-      scales: {
-        x: {
-          grid: {
-            color: "rgba(255, 255, 255, 0.05)",
-            drawBorder: false
-          },
-          ticks: {
-            padding: 10
-          }
-        },
-        y: {
-          beginAtZero: true,
-          grid: {
-            color: "rgba(255, 255, 255, 0.05)",
-            drawBorder: false
-          },
-          ticks: {
-            padding: 10,
-            stepSize: 10
-          }
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index',
-      },
+      }
     }
+
   });
 }
+
 window.onload = initChart;
